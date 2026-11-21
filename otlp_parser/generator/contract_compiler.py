@@ -36,11 +36,11 @@ from otlp_parser.generator.rules import (
     MutationMatcherRule,
     RedundancyRateRule,
     TerminalStateRule,
-    ToolOutputUtilizationRule,
-    ToolParamCountRule,
-    ToolParamTypeRule,
-    ToolResultTypeRule,
-    ToolSequenceRule,
+    ExecutionOutputUtilizationRule,
+    ExecutionParamCountRule,
+    ExecutionParamTypeRule,
+    ExecutionResultTypeRule,
+    ExecutionSequenceRule,
 )
 from otlp_parser.models.contract import (
     BehaviorContract,
@@ -71,13 +71,13 @@ class _RuleArtifact(str, Enum):
 _CLASSIFICATION: dict[type, _RuleArtifact] = {
     # Contract rules
     DataDependencyRule: _RuleArtifact.contract,
-    ToolSequenceRule: _RuleArtifact.contract,
-    ToolParamTypeRule: _RuleArtifact.contract,
-    ToolParamCountRule: _RuleArtifact.contract,
-    ToolResultTypeRule: _RuleArtifact.contract,
+    ExecutionSequenceRule: _RuleArtifact.contract,
+    ExecutionParamTypeRule: _RuleArtifact.contract,
+    ExecutionParamCountRule: _RuleArtifact.contract,
+    ExecutionResultTypeRule: _RuleArtifact.contract,
     TerminalStateRule: _RuleArtifact.contract,
     MutationMatcherRule: _RuleArtifact.contract,
-    ToolOutputUtilizationRule: _RuleArtifact.contract,
+    ExecutionOutputUtilizationRule: _RuleArtifact.contract,
     # Metrics rules (report only)
     RedundancyRateRule: _RuleArtifact.report,
     CycleBreakRule: _RuleArtifact.report,

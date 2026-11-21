@@ -195,7 +195,7 @@ class TestPathParserProperties:
 
         **Validates: Requirements 12.3**
         """
-        from otlp_parser.generator.rules.tool_result_type import (
+        from otlp_parser.generator.rules.execution_result_type import (
             _is_file_path_output,
         )
 

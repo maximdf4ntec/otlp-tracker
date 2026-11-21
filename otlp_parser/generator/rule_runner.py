@@ -37,12 +37,12 @@ from otlp_parser.generator.rules import (
     LatencyBudgetRule,
     MutationMatcherRule,
     RedundancyRateRule,
-    ToolOutputUtilizationRule,
-    ToolSequenceRule,
-    ToolParamCountRule,
-    ToolParamTypeRule,
+    ExecutionOutputUtilizationRule,
+    ExecutionSequenceRule,
+    ExecutionParamCountRule,
+    ExecutionParamTypeRule,
     TerminalStateRule,
-    ToolResultTypeRule,
+    ExecutionResultTypeRule,
 )
 
 _log = logging.getLogger(__name__)
@@ -54,16 +54,16 @@ _CONFIG_PATH = Path(__file__).parent / "hard_rules_otlp_config.yaml"
 # classmethod (sync or async).
 _REGISTRY: dict[str, type] = {
     "redundancy_rate": RedundancyRateRule,
-    "tool_sequence": ToolSequenceRule,
+    "execution_sequence": ExecutionSequenceRule,
     "data_dependency": DataDependencyRule,
     "cycle_breaker": CycleBreakRule,
     "mutation_matcher": MutationMatcherRule,
     "terminal_state": TerminalStateRule,
-    "tool_param_count": ToolParamCountRule,
-    "tool_param_type": ToolParamTypeRule,
-    "tool_result_type": ToolResultTypeRule,
+    "execution_param_count": ExecutionParamCountRule,
+    "execution_param_type": ExecutionParamTypeRule,
+    "execution_result_type": ExecutionResultTypeRule,
     "latency_budget": LatencyBudgetRule,
-    "tool_output_utilization": ToolOutputUtilizationRule,
+    "execution_output_utilization": ExecutionOutputUtilizationRule,
 }
 
 
@@ -99,7 +99,7 @@ class HardRuleRunner:
         # Keys that are YAML-only metadata and should NOT be passed as kwargs.
         _META_KEYS = {"enabled", "description"}
 
-        # Track data_dependency rules so we can inject them into tool_sequence.
+        # Track data_dependency rules so we can inject them into execution_sequence.
         data_dependency_rules: list[HardRule] = []
 
         for rule_name, rule_cfg in rules_config.items():
@@ -117,7 +117,7 @@ class HardRuleRunner:
             # Inject special context where needed.
             if rule_name == "mutation_matcher" and failure_keywords:
                 params["failure_keywords"] = failure_keywords
-            if rule_name == "tool_sequence":
+            if rule_name == "execution_sequence":
                 params["data_dependency_rules"] = data_dependency_rules
 
             try:

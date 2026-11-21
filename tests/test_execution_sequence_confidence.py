@@ -1,4 +1,4 @@
-"""Unit tests for the ToolSequenceRule confidence heuristic.
+﻿"""Unit tests for the ExecutionSequenceRule confidence heuristic.
 
 Validates Requirements 9.5, 9.6, 9.7, 9.8, 9.9 from the contract-redesign spec.
 """
@@ -8,8 +8,8 @@ from datetime import datetime, timezone
 import pytest
 
 from otlp_parser.generator.rules.data_dependency import DataDependencyRule
-from otlp_parser.generator.rules.tool_sequence import (
-    ToolSequenceRule,
+from otlp_parser.generator.rules.execution_sequence import (
+    ExecutionSequenceRule,
     _PairObservation,
     _check_data_dependency_with_steps,
     _compute_confidence,
@@ -40,14 +40,14 @@ class TestComputeConfidence:
     """Test the three-signal confidence scoring function."""
 
     def test_data_flow_yields_high(self):
-        """Req 9.5: Data-flow dependency → high confidence."""
+        """Req 9.5: Data-flow dependency â†’ high confidence."""
         result = _compute_confidence(
             "read_file", "str_replace", 1, has_data_flow=True, powerful_couples=set()
         )
         assert result == ConfidenceLevel.high
 
     def test_powerful_couple_yields_high(self):
-        """Req 9.6: Powerful couple → high confidence."""
+        """Req 9.6: Powerful couple â†’ high confidence."""
         couples = {("read_file", "str_replace")}
         result = _compute_confidence(
             "read_file", "str_replace", 1, has_data_flow=False, powerful_couples=couples
@@ -55,7 +55,7 @@ class TestComputeConfidence:
         assert result == ConfidenceLevel.high
 
     def test_count_threshold_yields_high(self):
-        """Req 9.7: Count >= threshold → high confidence."""
+        """Req 9.7: Count >= threshold â†’ high confidence."""
         result = _compute_confidence(
             "tool_a",
             "tool_b",
@@ -67,7 +67,7 @@ class TestComputeConfidence:
         assert result == ConfidenceLevel.high
 
     def test_below_threshold_no_signals_yields_none(self):
-        """Req 9.8: Below threshold + no signals → suppress (None)."""
+        """Req 9.8: Below threshold + no signals â†’ suppress (None)."""
         result = _compute_confidence(
             "tool_a",
             "tool_b",
@@ -79,7 +79,7 @@ class TestComputeConfidence:
         assert result is None
 
     def test_zero_occurrences_no_signals_yields_none(self):
-        """Zero occurrences with no other signals → suppress."""
+        """Zero occurrences with no other signals â†’ suppress."""
         result = _compute_confidence(
             "tool_a", "tool_b", 0, has_data_flow=False, powerful_couples=set()
         )
@@ -93,7 +93,7 @@ class TestComputeConfidence:
         assert result == ConfidenceLevel.high
 
     def test_powerful_couple_not_in_set(self):
-        """Pair not in powerful_couples set → no couple signal."""
+        """Pair not in powerful_couples set â†’ no couple signal."""
         couples = {("create_file", "write_file")}
         result = _compute_confidence(
             "read_file", "str_replace", 1, has_data_flow=False, powerful_couples=couples
@@ -147,7 +147,7 @@ class TestCheckDataDependency:
     """Test data-flow cross-reference lookup."""
 
     def test_matching_data_flow(self):
-        """DataDependencyRule shows tool_b consuming from tool_a → True."""
+        """DataDependencyRule shows tool_b consuming from tool_a â†’ True."""
         dep_rule = DataDependencyRule(
             id="data_dep_2_path_1",
             step_index=2,
@@ -165,7 +165,7 @@ class TestCheckDataDependency:
         )
 
     def test_no_matching_source_tool(self):
-        """Source step belongs to a different tool → False."""
+        """Source step belongs to a different tool â†’ False."""
         dep_rule = DataDependencyRule(
             id="data_dep_2_path_1",
             step_index=2,
@@ -183,7 +183,7 @@ class TestCheckDataDependency:
         )
 
     def test_no_matching_consumer_tool(self):
-        """Consumer tool doesn't match → False."""
+        """Consumer tool doesn't match â†’ False."""
         dep_rule = DataDependencyRule(
             id="data_dep_2_path_1",
             step_index=2,
@@ -201,7 +201,7 @@ class TestCheckDataDependency:
         )
 
     def test_empty_rules_list(self):
-        """No dependency rules → False."""
+        """No dependency rules â†’ False."""
         assert _check_data_dependency_with_steps("a", "b", [], {0: "a"}) is False
 
 
@@ -221,7 +221,7 @@ class TestFromTrace:
     """Integration tests for the full from_trajectory flow."""
 
     def test_suppresses_below_threshold(self):
-        """Req 9.8: Single observation, no signals → no rules emitted."""
+        """Req 9.8: Single observation, no signals â†’ no rules emitted."""
         steps = [
             _make_step(0, StepType.execution, execution=_tool("tool_a", x=1)),
             _make_step(
@@ -230,13 +230,13 @@ class TestFromTrace:
             _make_step(2, StepType.execution, tool=_tool("tool_b", y=2)),
         ]
         trajectory = Trace(id="test", steps=steps)
-        rules = ToolSequenceRule.from_trajectory(
+        rules = ExecutionSequenceRule.from_trajectory(
             trajectory, powerful_couples=set(), confidence_threshold=3
         )
         assert len(rules) == 0
 
     def test_emits_for_powerful_couple(self):
-        """Req 9.6: Powerful couple pair → emits with high confidence."""
+        """Req 9.6: Powerful couple pair â†’ emits with high confidence."""
         steps = [
             _make_step(0, StepType.execution, tool=_tool("read_file", p="x")),
             _make_step(
@@ -247,7 +247,7 @@ class TestFromTrace:
             _make_step(2, StepType.execution, tool=_tool("str_replace", o="a")),
         ]
         trajectory = Trace(id="test", steps=steps)
-        rules = ToolSequenceRule.from_trajectory(
+        rules = ExecutionSequenceRule.from_trajectory(
             trajectory,
             powerful_couples={("read_file", "str_replace")},
             confidence_threshold=3,
@@ -258,7 +258,7 @@ class TestFromTrace:
         assert all(r.confidence == ConfidenceLevel.high for r in rules)
 
     def test_emits_for_count_threshold(self):
-        """Req 9.7: Enough observations → emits with high confidence."""
+        """Req 9.7: Enough observations â†’ emits with high confidence."""
         steps = []
         for i in range(3):
             base = i * 3
@@ -282,7 +282,7 @@ class TestFromTrace:
                 ]
             )
         trajectory = Trace(id="test", steps=steps)
-        rules = ToolSequenceRule.from_trajectory(
+        rules = ExecutionSequenceRule.from_trajectory(
             trajectory, powerful_couples=set(), confidence_threshold=3
         )
         # Only positive rule (all observations show A succeeding).
@@ -291,8 +291,8 @@ class TestFromTrace:
         assert all(r.confidence == ConfidenceLevel.high for r in rules)
 
     def test_skips_inconsistent_ordering(self):
-        """Req 9.9: Inconsistent pattern → no rules emitted."""
-        # All observations have A failing (error step follows) → inconsistent
+        """Req 9.9: Inconsistent pattern â†’ no rules emitted."""
+        # All observations have A failing (error step follows) â†’ inconsistent
         steps = [
             _make_step(0, StepType.execution, tool=_tool("tool_a", x=1)),
             _make_step(
@@ -312,7 +312,7 @@ class TestFromTrace:
             _make_step(7, StepType.execution, tool=_tool("tool_b", y=2)),
         ]
         trajectory = Trace(id="test", steps=steps)
-        rules = ToolSequenceRule.from_trajectory(
+        rules = ExecutionSequenceRule.from_trajectory(
             trajectory,
             powerful_couples={("tool_a", "tool_b")},
             confidence_threshold=1,
@@ -331,7 +331,7 @@ class TestFromTrace:
             _make_step(2, StepType.execution, tool=_tool("str_replace", o="a")),
         ]
         trajectory = Trace(id="test", steps=steps)
-        rules = ToolSequenceRule.from_trajectory(
+        rules = ExecutionSequenceRule.from_trajectory(
             trajectory,
             powerful_couples=[["read_file", "str_replace"]],
             confidence_threshold=3,
@@ -357,7 +357,7 @@ class TestFromTrace:
                     _make_step(base + 2, StepType.execution, tool=_tool("b", y=2)),
                 ]
             )
-        # 1 failure observation (A fails → error step → B still follows)
+        # 1 failure observation (A fails â†’ error step â†’ B still follows)
         base = 9
         steps.extend(
             [
@@ -372,7 +372,7 @@ class TestFromTrace:
             ]
         )
         trajectory = Trace(id="test", steps=steps)
-        rules = ToolSequenceRule.from_trajectory(
+        rules = ExecutionSequenceRule.from_trajectory(
             trajectory, powerful_couples=set(), confidence_threshold=3
         )
         polarities = {r.polarity for r in rules}
@@ -380,7 +380,7 @@ class TestFromTrace:
         assert RulePolarity.negative in polarities
 
     def test_data_flow_signal_from_dependency_rules(self):
-        """Req 9.5: Data-flow via DataDependencyRule cross-ref → high."""
+        """Req 9.5: Data-flow via DataDependencyRule cross-ref â†’ high."""
         steps = [
             _make_step(0, StepType.execution, tool=_tool("read_file", path="/x")),
             _make_step(
@@ -406,7 +406,7 @@ class TestFromTrace:
             tool_name="str_replace",
         )
 
-        rules = ToolSequenceRule.from_trajectory(
+        rules = ExecutionSequenceRule.from_trajectory(
             trajectory,
             powerful_couples=set(),
             confidence_threshold=3,
@@ -420,7 +420,8 @@ class TestFromTrace:
     def test_empty_trajectory(self):
         """Empty trajectory produces no rules."""
         trajectory = Trace(id="empty", steps=[])
-        rules = ToolSequenceRule.from_trajectory(
+        rules = ExecutionSequenceRule.from_trajectory(
             trajectory, powerful_couples=set(), confidence_threshold=3
         )
         assert len(rules) == 0
+

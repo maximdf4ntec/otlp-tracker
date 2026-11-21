@@ -243,8 +243,8 @@ def extract_file_paths(text: str) -> list[str]:
     """Extract all file paths (absolute Unix, absolute Windows, relative) from text.
 
     This is the single canonical file-path extraction used across all rules:
-    DataDependencyRule, ToolOutputUtilizationRule, LlmResponseUtilizationRule,
-    LlmGroundingRule, and ToolResultTypeRule.
+    DataDependencyRule, ExecutionOutputUtilizationRule, LlmResponseUtilizationRule,
+    LlmGroundingRule, and ExecutionResultTypeRule.
 
     Args:
         text: Raw text to scan for file paths.
@@ -277,7 +277,7 @@ def extract_trackable_values(text: str) -> list[str]:
     individually.  For short text without paths, returns the text as-is.
 
     This is the single canonical algorithm used by DataDependencyRule,
-    ToolOutputUtilizationRule, and LlmResponseUtilizationRule.
+    ExecutionOutputUtilizationRule, and LlmResponseUtilizationRule.
 
     Args:
         text: Raw text (tool output or parameter value) to decompose.

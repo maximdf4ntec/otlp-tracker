@@ -12,15 +12,15 @@ from typing import Callable
 from otlp_parser.generator.rules.data_dependency import DataDependencyRule
 from otlp_parser.generator.rules.mutation_matcher import MutationMatcherRule
 from otlp_parser.generator.rules.terminal_state import TerminalStateRule
-from otlp_parser.generator.rules.tool_checks import (
-    ToolParamCountRule,
-    ToolParamTypeRule,
+from otlp_parser.generator.rules.execution_checks import (
+    ExecutionParamCountRule,
+    ExecutionParamTypeRule,
 )
-from otlp_parser.generator.rules.tool_output_utilization import (
-    ToolOutputUtilizationRule,
+from otlp_parser.generator.rules.execution_output_utilization import (
+    ExecutionOutputUtilizationRule,
 )
-from otlp_parser.generator.rules.tool_result_type import ToolResultTypeRule
-from otlp_parser.generator.rules.tool_sequence import ToolSequenceRule
+from otlp_parser.generator.rules.execution_result_type import ExecutionResultTypeRule
+from otlp_parser.generator.rules.execution_sequence import ExecutionSequenceRule
 from otlp_parser.models.contract import (
     CompiledRule,
     RuleCardinality,
@@ -56,14 +56,14 @@ def emit_data_dependency(rule: HardRule) -> CompiledRule:
     )
 
 
-def emit_tool_sequence(rule: HardRule) -> CompiledRule:
-    """Convert a ToolSequenceRule to a step-agnostic CompiledRule."""
-    assert isinstance(rule, ToolSequenceRule)
+def emit_execution_sequence(rule: HardRule) -> CompiledRule:
+    """Convert an ExecutionSequenceRule to a step-agnostic CompiledRule."""
+    assert isinstance(rule, ExecutionSequenceRule)
     from otlp_parser.models.rule import RulePolarity
 
     condition = "a_succeeds" if rule.polarity == RulePolarity.positive else "a_fails"
     behavior = "b_valid" if rule.polarity == RulePolarity.positive else "b_blocked"
-    kind = f"tool_ordering_{condition}"
+    kind = f"execution_order_{condition}"
     return CompiledRule(
         id=_PLACEHOLDER_ID,
         category=RuleCategory.workflow,
@@ -76,8 +76,8 @@ def emit_tool_sequence(rule: HardRule) -> CompiledRule:
 
 
 def emit_param_type(rule: HardRule) -> CompiledRule:
-    """Convert a ToolParamTypeRule to a step-agnostic CompiledRule."""
-    assert isinstance(rule, ToolParamTypeRule)
+    """Convert an ExecutionParamTypeRule to a step-agnostic CompiledRule."""
+    assert isinstance(rule, ExecutionParamTypeRule)
     return CompiledRule(
         id=_PLACEHOLDER_ID,
         category=RuleCategory.interface,
@@ -90,8 +90,8 @@ def emit_param_type(rule: HardRule) -> CompiledRule:
 
 
 def emit_param_count(rule: HardRule) -> CompiledRule:
-    """Convert a ToolParamCountRule to a step-agnostic CompiledRule."""
-    assert isinstance(rule, ToolParamCountRule)
+    """Convert an ExecutionParamCountRule to a step-agnostic CompiledRule."""
+    assert isinstance(rule, ExecutionParamCountRule)
     return CompiledRule(
         id=_PLACEHOLDER_ID,
         category=RuleCategory.interface,
@@ -104,8 +104,8 @@ def emit_param_count(rule: HardRule) -> CompiledRule:
 
 
 def emit_result_type(rule: HardRule) -> CompiledRule:
-    """Convert a ToolResultTypeRule to a step-agnostic CompiledRule."""
-    assert isinstance(rule, ToolResultTypeRule)
+    """Convert an ExecutionResultTypeRule to a step-agnostic CompiledRule."""
+    assert isinstance(rule, ExecutionResultTypeRule)
     return CompiledRule(
         id=_PLACEHOLDER_ID,
         category=RuleCategory.interface,
@@ -148,11 +148,11 @@ def emit_mutation_matcher(rule: HardRule) -> CompiledRule:
     )
 
 
-def emit_tool_output_utilization(rule: HardRule) -> CompiledRule:
-    """Convert a ToolOutputUtilizationRule to a step-agnostic CompiledRule."""
-    assert isinstance(rule, ToolOutputUtilizationRule)
+def emit_execution_output_utilization(rule: HardRule) -> CompiledRule:
+    """Convert an ExecutionOutputUtilizationRule to a step-agnostic CompiledRule."""
+    assert isinstance(rule, ExecutionOutputUtilizationRule)
     consumed = rule.consumed_by_step is not None
-    kind = "tool_output_consumed" if consumed else "tool_output_not_consumed"
+    kind = "execution_output_consumed" if consumed else "execution_output_not_consumed"
     return CompiledRule(
         id=_PLACEHOLDER_ID,
         category=RuleCategory.provenance,
@@ -170,13 +170,13 @@ def emit_tool_output_utilization(rule: HardRule) -> CompiledRule:
 
 _EMITTER_REGISTRY: dict[type, EmitterFn] = {
     DataDependencyRule: emit_data_dependency,
-    ToolSequenceRule: emit_tool_sequence,
-    ToolParamTypeRule: emit_param_type,
-    ToolParamCountRule: emit_param_count,
-    ToolResultTypeRule: emit_result_type,
+    ExecutionSequenceRule: emit_execution_sequence,
+    ExecutionParamTypeRule: emit_param_type,
+    ExecutionParamCountRule: emit_param_count,
+    ExecutionResultTypeRule: emit_result_type,
     TerminalStateRule: emit_terminal_state,
     MutationMatcherRule: emit_mutation_matcher,
-    ToolOutputUtilizationRule: emit_tool_output_utilization,
+    ExecutionOutputUtilizationRule: emit_execution_output_utilization,
 }
 
 

@@ -1,7 +1,7 @@
 """PathParser — detects Unix and Windows absolute file paths.
 
 Detection logic is consistent with ``_is_file_path_output`` from
-``otlp_parser/generator/rules/tool_result_type.py``, adapted for
+``otlp_parser/generator/rules/execution_result_type.py``, adapted for
 single parameter values rather than multi-line tool output.
 """
 

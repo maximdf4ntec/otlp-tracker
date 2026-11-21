@@ -1,7 +1,7 @@
 """JsonParser — detects valid JSON strings and exposes top-level structure.
 
 Detection logic reuses the same structural check as ``_is_valid_json`` from
-``otlp_parser/generator/rules/tool_result_type.py``: the value must be a
+``otlp_parser/generator/rules/execution_result_type.py``: the value must be a
 string that starts with ``{`` or ``[`` (after stripping) and successfully
 parses via ``json.loads``.
 
@@ -25,7 +25,7 @@ from otlp_parser.parsers.parameter.base import ParameterParser
 def _is_valid_json(text: str) -> bool:
     """Return True when *text* is parseable JSON starting with ``{`` or ``[``.
 
-    This replicates the logic from ``tool_result_type._is_valid_json`` to
+    This replicates the logic from ``execution_result_type._is_valid_json`` to
     maintain detection parity (Requirement 12.1).
     """
     stripped = text.strip()

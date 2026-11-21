@@ -35,7 +35,7 @@ trajectory_rules:
   data_dependency:
     enabled: true
 
-  tool_sequence:
+  execution_sequence:
     enabled: true
     confidence_threshold: 3
     powerful_couples:
@@ -74,18 +74,18 @@ trajectory_rules:
       - submit
       - submitted
 
-  tool_param_count:
+  execution_param_count:
     enabled: true
     description: "Tool must receive exactly the observed number of parameters"
 
-  tool_param_type:
+  execution_param_type:
     enabled: true
     description: "Each parameter must have the expected Python type"
 
-  # Rule k — Tool Result Output Type Validation
+  # Rule k — Execution Result Output Type Validation
   # Detects structured types (JSON, XML, Python, number) in execution_result outputs
   # and asserts they remain valid.  No configurable parameters.
-  tool_result_type:
+  execution_result_type:
     enabled: true
 
   # Rule l — LLM Response Format / Schema Conformance
@@ -113,9 +113,9 @@ trajectory_rules:
     enabled: true
     latency_budget_pct: 50.0
 
-  # Rule p — Tool Output Utilization
+  # Rule p — Execution Output Utilization
   # Verifies execution_result outputs are consumed by a downstream step.
-  tool_output_utilization:
+  execution_output_utilization:
     enabled: true
 
   # Rule q — LLM Response Utilization
@@ -124,3 +124,5 @@ trajectory_rules:
     enabled: false
 
 per_step_rules: {}
+
+execution_sequence:

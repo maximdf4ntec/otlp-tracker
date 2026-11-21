@@ -340,7 +340,7 @@ class DataDependencyRule(HardRule):
         """Extract individual trackable values from a parameter.
 
         Delegates to the shared :func:`extract_trackable_values` utility
-        in fact_normalizer for consistency with ToolOutputUtilizationRule.
+        in fact_normalizer for consistency with ExecutionOutputUtilizationRule.
         """
         normalized = normalize_value(value)
         if not normalized:

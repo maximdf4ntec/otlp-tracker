@@ -11,12 +11,12 @@ from otlp_parser.models.trace import Step, StepType, Trace
 from otlp_parser.generator.utils.fact_normalizer import (
     extract_trackable_values,
 )
-from otlp_parser.generator.rules.tool_result_type import (
+from otlp_parser.generator.rules.execution_result_type import (
     detect_output_type as _detect_result_output_type,
 )
 
 
-class ToolOutputUtilizationRule(HardRule):
+class ExecutionOutputUtilizationRule(HardRule):
     """Verifies execution_result output is consumed by a downstream step.
 
     Attributes:
@@ -39,7 +39,7 @@ class ToolOutputUtilizationRule(HardRule):
     pseudocode: str = ""
 
     @model_validator(mode="after")
-    def _derive_text_fields(self) -> "ToolOutputUtilizationRule":
+    def _derive_text_fields(self) -> "ExecutionOutputUtilizationRule":
         if self.consumed_by_step is not None:
             self.polarity = RulePolarity.positive
             self.rule_description = (
@@ -70,7 +70,7 @@ class ToolOutputUtilizationRule(HardRule):
     @classmethod
     def from_trajectory(
         cls, trajectory: Trace, **kwargs
-    ) -> list["ToolOutputUtilizationRule"]:
+    ) -> list["ExecutionOutputUtilizationRule"]:
         steps = trajectory.steps
         # Find all execution_result steps
         execution_result_steps = [
@@ -80,7 +80,7 @@ class ToolOutputUtilizationRule(HardRule):
             return []
 
         last_execution_result_idx = execution_result_steps[-1].index
-        rules: list[ToolOutputUtilizationRule] = []
+        rules: list[ExecutionOutputUtilizationRule] = []
 
         for step in execution_result_steps:
             if step.index == last_execution_result_idx:

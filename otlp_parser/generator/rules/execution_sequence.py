@@ -1,7 +1,7 @@
 """Rule c — Tool Sequence Dependency.
 
 For every execution_result step R that bridges a preceding call A and a following
-call B, ToolSequenceRule instances are emitted with confidence scoring based
+call B, ExecutionSequenceRule instances are emitted with confidence scoring based
 on three signals:
 
 1. Data-flow: B uses a parameter originating from A's output → high confidence
@@ -171,11 +171,11 @@ def _is_inconsistent(observations: list[_PairObservation]) -> bool:
 
 
 # ---------------------------------------------------------------------------
-# ToolSequenceRule
+# ExecutionSequenceRule
 # ---------------------------------------------------------------------------
 
 
-class ToolSequenceRule(HardRule):
+class ExecutionSequenceRule(HardRule):
     """Rule c: tool B may only follow tool A given A's result status.
 
     One instance is created per polarity per A-result-B triple found in the
@@ -207,7 +207,7 @@ class ToolSequenceRule(HardRule):
     pseudocode: str = ""
 
     @model_validator(mode="after")
-    def _derive_text_fields(self) -> "ToolSequenceRule":
+    def _derive_text_fields(self) -> "ExecutionSequenceRule":
         """Compute rule_description and pseudocode based on polarity."""
         if self.polarity == RulePolarity.positive:
             self.rule_description = (
@@ -249,7 +249,7 @@ class ToolSequenceRule(HardRule):
         powerful_couples: Optional[set[tuple[str, str]] | list] = None,
         confidence_threshold: int = 3,
         data_dependency_rules: Optional[list] = None,
-    ) -> list["ToolSequenceRule"]:
+    ) -> list["ExecutionSequenceRule"]:
         """Build sequence rules with confidence-based filtering.
 
         Collects all A→B pairs from the trajectory, applies multi-signal
@@ -267,7 +267,7 @@ class ToolSequenceRule(HardRule):
                 for cross-referencing data flow. Defaults to empty list.
 
         Returns:
-            ToolSequenceRule instances (positive + negative) for pairs that
+            ExecutionSequenceRule instances (positive + negative) for pairs that
             pass the confidence heuristic. Pairs below threshold or with
             inconsistent ordering are suppressed.
         """
@@ -328,7 +328,7 @@ class ToolSequenceRule(HardRule):
             )
 
         # Phase 2: Score and filter
-        rules: list[ToolSequenceRule] = []
+        rules: list[ExecutionSequenceRule] = []
 
         for (tool_a, tool_b), observations in pairs.items():
             # Skip self-loops — a tool following itself is not a meaningful

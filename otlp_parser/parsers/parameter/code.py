@@ -1,7 +1,7 @@
 """CodeParser: detects Python source code in parameter values.
 
 Reuses the same Python-keyword heuristic as ``_is_valid_python`` in
-``otlp_parser/generator/rules/tool_result_type.py`` to maintain
+``otlp_parser/generator/rules/execution_result_type.py`` to maintain
 detection parity between input and output typing (Req 12.2).
 """
 
@@ -17,7 +17,7 @@ from otlp_parser.models.tool import (
 )
 from otlp_parser.parsers.parameter.base import ParameterParser
 
-# Same keyword list used by _is_valid_python in tool_result_type.py (Req 7.3).
+# Same keyword list used by _is_valid_python in execution_result_type.py (Req 7.3).
 _PYTHON_KEYWORDS: tuple[str, ...] = (
     "def ",
     "class ",
@@ -34,7 +34,7 @@ _PYTHON_KEYWORDS: tuple[str, ...] = (
 class CodeParser(ParameterParser):
     """Parser that detects Python source code via keyword heuristic + AST check.
 
-    Detection logic mirrors ``_is_valid_python`` from tool_result_type.py:
+    Detection logic mirrors ``_is_valid_python`` from execution_result_type.py:
     the value must contain at least one Python keyword **and** parse
     successfully via :func:`ast.parse`.
 

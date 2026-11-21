@@ -163,7 +163,7 @@ def detect_output_type(
     When no structured type is detected, returns ``OutputType.plain_text``.
 
     This function is the single canonical output-type detector, used by both
-    ToolResultTypeRule and ToolOutputUtilizationRule.
+    ExecutionResultTypeRule and ExecutionOutputUtilizationRule.
 
     Args:
         tool_name: Name of the tool that produced *content*.
@@ -207,7 +207,7 @@ _VALIDATORS: dict[OutputType, Callable[[str], bool]] = {
 }
 
 
-class ToolResultTypeRule(HardRule):
+class ExecutionResultTypeRule(HardRule):
     """Rule k: execution_result output must remain valid for its detected type.
 
     ``polarity`` is ``positive`` when the reference output is valid for the
@@ -233,7 +233,7 @@ class ToolResultTypeRule(HardRule):
     pseudocode: str = ""
 
     @model_validator(mode="after")
-    def _derive_text_fields(self) -> "ToolResultTypeRule":
+    def _derive_text_fields(self) -> "ExecutionResultTypeRule":
         """Derive rule_description, pseudocode, and polarity from typed fields."""
         type_label = self.detected_type.value.upper()
         if self.is_valid:
@@ -262,19 +262,19 @@ class ToolResultTypeRule(HardRule):
         )
 
     @classmethod
-    def from_trajectory(cls, trajectory: Trace) -> list["ToolResultTypeRule"]:
+    def from_trajectory(cls, trajectory: Trace) -> list["ExecutionResultTypeRule"]:
         """Build output-type rules for all execution_result steps.
 
         Args:
             trajectory: The full trajectory to analyse.
 
         Returns:
-            One ToolResultTypeRule per execution_result step with non-empty output,
+            One ExecutionResultTypeRule per execution_result step with non-empty output,
             including plain_text results (to distinguish "returns text" from
             "returns void").
         """
         steps = trajectory.steps
-        rules: list[ToolResultTypeRule] = []
+        rules: list[ExecutionResultTypeRule] = []
 
         for step in steps:
             if step.step_type != StepType.execution_result:
@@ -292,7 +292,7 @@ class ToolResultTypeRule(HardRule):
 
             rules.append(
                 cls(
-                    id=f"tool_result_type_{step.index}",
+                    id=f"execution_result_type_{step.index}",
                     step_index=step.index,
                     tool_name=tool_name,
                     detected_type=detected_type,

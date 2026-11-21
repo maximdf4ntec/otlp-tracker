@@ -3,8 +3,8 @@
 These rules now operate at the trajectory level via ``from_trajectory`` classmethods
 that scan all execution steps and collect observations for downstream deduplication.
 
-ToolParamCountRule (Rule h) — the tool receives exactly N parameters.
-ToolParamTypeRule  (Rule h) — each parameter has the expected Python type.
+ExecutionParamCountRule (Rule h) — the tool receives exactly N parameters.
+ExecutionParamTypeRule  (Rule h) — each parameter has the expected Python type.
 """
 
 from __future__ import annotations
@@ -23,7 +23,7 @@ from otlp_parser.models.rule import (
 from otlp_parser.models.trace import Step, StepType, Trace
 
 
-class ToolParamCountRule(HardRule):
+class ExecutionParamCountRule(HardRule):
     """Rule h (count): the tool must receive exactly the observed number of parameters.
 
     Attributes:
@@ -43,7 +43,7 @@ class ToolParamCountRule(HardRule):
     pseudocode: str = ""
 
     @model_validator(mode="after")
-    def _derive_text_fields(self) -> "ToolParamCountRule":
+    def _derive_text_fields(self) -> "ExecutionParamCountRule":
         """Compute rule_description and pseudocode from typed fields."""
         self.rule_description = (
             f"Tool '{self.tool_name}' at step {self.step_index} must receive "
@@ -57,24 +57,24 @@ class ToolParamCountRule(HardRule):
         return f"len(step[{self.step_index}].tool.inputs) == {self.expected_count}"
 
     @classmethod
-    def from_trajectory(cls, trajectory: Trace) -> list["ToolParamCountRule"]:
+    def from_trajectory(cls, trajectory: Trace) -> list["ExecutionParamCountRule"]:
         """Scan ALL execution steps, collect param count per tool.
 
         Args:
             trajectory: The full trajectory to scan.
 
         Returns:
-            A list of ToolParamCountRule instances — one per execution step
+            A list of ExecutionParamCountRule instances — one per execution step
             that has tool inputs. Deduplication happens downstream.
         """
-        rules: list[ToolParamCountRule] = []
+        rules: list[ExecutionParamCountRule] = []
         for step in trajectory.steps:
             if step.step_type != StepType.execution or step.execution is None:
                 continue
             if not step.execution.inputs:
                 continue
             rule = cls(
-                id=f"tool_params_{step.index}_count",
+                id=f"execution_params_{step.index}_count",
                 step_index=step.index,
                 tool_name=step.execution.name,
                 expected_count=len(step.execution.inputs),
@@ -83,7 +83,7 @@ class ToolParamCountRule(HardRule):
         return rules
 
 
-class ToolParamTypeRule(HardRule):
+class ExecutionParamTypeRule(HardRule):
     """Rule h (type): a specific parameter must have the expected Python type.
 
     Attributes:
@@ -105,7 +105,7 @@ class ToolParamTypeRule(HardRule):
     pseudocode: str = ""
 
     @model_validator(mode="after")
-    def _derive_text_fields(self) -> "ToolParamTypeRule":
+    def _derive_text_fields(self) -> "ExecutionParamTypeRule":
         """Compute rule_description and pseudocode from typed fields."""
         self.rule_description = (
             f"Parameter '{self.param_key}' of '{self.tool_name}' at step "
@@ -122,17 +122,19 @@ class ToolParamTypeRule(HardRule):
         )
 
     @classmethod
-    def from_trajectory(cls, trajectory: Trace) -> list["ToolParamTypeRule"]:
+    def from_trajectory(cls, trajectory: Trace) -> list["ExecutionParamTypeRule"]:
         """Scan ALL execution steps, collect type observations per (tool, param).
 
         Args:
             trajectory: The full trajectory to scan.
 
         Returns:
-            A list of ToolParamTypeRule instances — one per (tool, param, step)
+            A list of ExecutionParamTypeRule instances — one per (tool, param, step)
             observation. Deduplication happens downstream.
         """
-        observations: dict[tuple[str, str], list[ToolParamTypeRule]] = defaultdict(list)
+        observations: dict[tuple[str, str], list[ExecutionParamTypeRule]] = defaultdict(
+            list
+        )
 
         for step in trajectory.steps:
             if step.step_type != StepType.execution or step.execution is None:
@@ -142,7 +144,7 @@ class ToolParamTypeRule(HardRule):
             tool_name = step.execution.name
             for param in step.execution.inputs:
                 rule = cls(
-                    id=f"tool_params_{step.index}_{param.key}_type",
+                    id=f"execution_params_{step.index}_{param.key}_type",
                     step_index=step.index,
                     tool_name=tool_name,
                     param_key=param.key,
