@@ -1,0 +1,172 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1. Create `oltp_tracker/generator/hard_rules_otlp_config.yaml`": [
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795163814917
+      },
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795163820941
+      },
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795163952703
+      }
+    ],
+    "2.1 Implement `_load_raw`, `_flatten_spans`, and `_build_span_index`": [
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795163816034
+      },
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795163955155
+      },
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795164046281
+      }
+    ],
+    "2.3 Implement `_extract_attr_value` and `_classify_span`": [
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795163816153
+      },
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795164050817
+      },
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795164154486
+      }
+    ],
+    "2.5 Implement `_span_to_step`": [
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795163816240
+      },
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795164156782
+      },
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795164331391
+      }
+    ],
+    "2.7 Implement `_assemble_trajectory` and public `parse_otlp`": [
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795163816349
+      },
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795164333656
+      },
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795164463205
+      }
+    ],
+    "3. Checkpoint — Ensure all unit and property tests pass": [
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795163816388
+      },
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795164465515
+      },
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795165947813
+      }
+    ],
+    "4.1 Update `oltp_tracker/parsers/__init__.py`": [
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795163816434
+      },
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795165950171
+      },
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795166047136
+      }
+    ],
+    "4.2 Create `eval_otlp.py` at workspace root": [
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795163816482
+      },
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795165952339
+      },
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795166049558
+      }
+    ],
+    "6. Final checkpoint — Ensure all tests pass": [
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795163816561
+      },
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795166051975
+      },
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795166118476
+      }
+    ],
+    "2. Implement `oltp_tracker/parsers/otlp.py`": [
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795164463242
+      }
+    ],
+    "4. Register parser and add CLI entry point": [
+      {
+        "executionId": "eef52e9b-17ef-4cc1-8802-b977e49439fa",
+        "chatSessionId": "sess_df431cb6-62d0-4788-975f-1dfec631e3a0",
+        "timestamp": 1795166049640
+      }
+    ]
+  }
+}
